@@ -1,2 +1,2 @@
 # PracticeAlgorithm
-Record my practice Algorithm for Java or Python
+Recording my practice Algorithm for Java or Python
