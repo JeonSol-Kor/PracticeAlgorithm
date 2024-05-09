@@ -18,14 +18,8 @@ public class Main {
 			String S = RSsep[1];
 
 			for (int j = 0; j < S.length(); j++) {
-				if (S.charAt(j) == '\\') {
-					for (int k = 0; k < R; k++) {
-						output[i] += S.charAt(j);
-					}
-				} else {
-					for (int k = 0; k < R; k++) {
-						output[i] += S.charAt(j);
-					}
+				for (int k = 0; k < R; k++) {
+					output[i] += S.charAt(j);
 				}
 			}
 
