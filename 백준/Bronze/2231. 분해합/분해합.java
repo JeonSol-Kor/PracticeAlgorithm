@@ -4,10 +4,15 @@ import java.util.*;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();
+		String strN = sc.next();
 		sc.close();
+		int N = Integer.parseInt(strN);
+		int min = N - strN.length() * 9;
+		if (min < 1) {
+			min = 1;
+		}
 		int M = 0;
-		for (int i = 1; i < N; i++) {
+		for (int i = min; i < N; i++) {
 			int check = i;
 			int test = i;
 			while (check > 0) {
