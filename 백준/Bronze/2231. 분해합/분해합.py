@@ -5,7 +5,7 @@ if min < 1:
     min = 1
 M = 0
 
-for i in range(1, N):
+for i in range(min, N):
     check = i
     test = i
     while check > 0:
