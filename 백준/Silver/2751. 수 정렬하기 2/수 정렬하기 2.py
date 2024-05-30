@@ -10,4 +10,4 @@ for _ in range(N):
 
 for i in range(20000001):
     if count[i] > 0:
-        print(i-1000000)
+        sys.stdout.write(f"{i-1000000}\n")
