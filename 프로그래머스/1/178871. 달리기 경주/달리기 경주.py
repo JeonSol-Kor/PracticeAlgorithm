@@ -7,10 +7,8 @@ def solution(players, callings):
         rank = player_rank[calling]
         if rank > 0:
             # 추월이 가능한 경우 위치 변경
-            temp = players[rank - 1]
-            players[rank - 1] = calling
-            players[rank] = temp
-            player_rank[calling] = rank - 1
-            player_rank[temp] = rank
+            players[rank - 1], players[rank] = players[rank], players[rank - 1]
+            player_rank[players[rank]] = rank
+            player_rank[players[rank - 1]] = rank - 1
 
     return players
