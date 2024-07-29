@@ -8,42 +8,41 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         br.close();
 
-        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> firstLine = new LinkedList<>();
         for (int i = 0; i < N; i++) {
-            queue.offer(Integer.parseInt(st.nextToken()));
+            firstLine.offer(Integer.parseInt(st.nextToken()));
         }
 
-        Stack<Integer> stack = new Stack<>();
-        int expected = 1;
+        Stack<Integer> lastLine = new Stack<>();
+        int check = 1;
+		String answer = "Nice";
 
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            if (current == expected) {
-                expected++;
-                // Check stack for additional items
-                while (!stack.isEmpty() && stack.peek() == expected) {
-                    stack.pop();
-                    expected++;
+        while (!firstLine.isEmpty()) {
+            int current = firstLine.poll();
+            if (current == check) {
+                check++;
+                while (!lastLine.isEmpty() && lastLine.peek() == check) {
+                    lastLine.pop();
+                    check++;
                 }
             } else {
-                if (stack.isEmpty() || stack.peek() > current) {
-                    stack.push(current);
+                if (lastLine.isEmpty() || lastLine.peek() > current) {
+                    lastLine.push(current);
                 } else {
-                    System.out.println("Sad");
-                    return;
+                    answer = "Sad";
+                    break;
                 }
             }
         }
 
-        // Check if remaining items in stack are in correct order
-        while (!stack.isEmpty()) {
-            if (stack.pop() != expected) {
-                System.out.println("Sad");
-                return;
+        while (!lastLine.isEmpty()) {
+			if (lastLine.pop() != check) {
+				answer = "Sad";
+				break;
             }
-            expected++;
+            check++;
         }
 
-        System.out.println("Nice");
+        System.out.println(answer);
     }
 }
