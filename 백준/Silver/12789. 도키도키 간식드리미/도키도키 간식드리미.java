@@ -1,43 +1,49 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();  // 사람의 수
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        br.close();
+
         Queue<Integer> queue = new LinkedList<>();
-        Stack<Integer> stack = new Stack<>();
-        
-        for (int i = 0; i < n; i++) {
-            queue.offer(sc.nextInt());
+        for (int i = 0; i < N; i++) {
+            queue.offer(Integer.parseInt(st.nextToken()));
         }
-        
-        int currentOrder = 1;  // 현재 간식을 받아야 하는 순서
-        
+
+        Stack<Integer> stack = new Stack<>();
+        int expected = 1;
+
         while (!queue.isEmpty()) {
-            if (queue.peek() == currentOrder) {
-                queue.poll();  // 현재 순서에 맞는 사람은 간식을 받음
-                currentOrder++;
-            } else if (!stack.isEmpty() && stack.peek() == currentOrder) {
-                stack.pop();  // 스택에서 기다리고 있던 사람이 순서에 맞으면 간식을 받음
-                currentOrder++;
+            int current = queue.poll();
+            if (current == expected) {
+                expected++;
+                // Check stack for additional items
+                while (!stack.isEmpty() && stack.peek() == expected) {
+                    stack.pop();
+                    expected++;
+                }
             } else {
-                stack.push(queue.poll());  // 순서에 맞지 않으면 스택에 넣음
+                if (stack.isEmpty() || stack.peek() > current) {
+                    stack.push(current);
+                } else {
+                    System.out.println("Sad");
+                    return;
+                }
             }
         }
-        
-        // 큐가 비었을 때, 스택을 확인하여 남아있는 사람이 순서대로 간식을 받을 수 있는지 확인
+
+        // Check if remaining items in stack are in correct order
         while (!stack.isEmpty()) {
-            if (stack.pop() == currentOrder) {
-                currentOrder++;
-            } else {
+            if (stack.pop() != expected) {
                 System.out.println("Sad");
                 return;
             }
+            expected++;
         }
-        
+
         System.out.println("Nice");
     }
 }
