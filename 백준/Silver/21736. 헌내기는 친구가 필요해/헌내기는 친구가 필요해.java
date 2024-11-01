@@ -12,12 +12,12 @@ public class Main {
 		int startX = -1;
 		int startY = -1;
 		
-		String[][] campus = new String[N][M];
+		String[] campus = new String[N];
 		
 		for (int i = 0; i < N; i++) {
-			campus[i] = br.readLine().split("");
+			campus[i] = br.readLine().trim();
 			for (int j = 0; j < M; j++) {
-				if (campus[i][j].equals("I")) {
+				if (campus[i].charAt(j) == 'I') {
 					startX = i;
 					startY = j;
 				}
@@ -43,10 +43,10 @@ public class Main {
 				int nx = x + dx[i];
 				int ny = y + dy[i];
 				
-				if (nx >= 0 && nx < N && ny >= 0 && ny < M && !visited[nx][ny] && !campus[nx][ny].equals("X")){
+				if (nx >= 0 && nx < N && ny >= 0 && ny < M && !visited[nx][ny] && campus[nx].charAt(ny) != 'X'){
 					visited[nx][ny] = true;
 					queue.offer(new int[]{nx, ny});
-					if (campus[nx][ny].equals("P")) cnt++;
+					if (campus[nx].charAt(ny) == 'P') cnt++;
 				}
 			}
 		}
