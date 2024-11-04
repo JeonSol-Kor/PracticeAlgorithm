@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static boolean[] check;
-	static HashMap<Integer, List<Integer>> nums;
+	static boolean[] visited;
+	static HashMap<Integer, List<Integer>> connect;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine().trim());
@@ -12,61 +12,62 @@ public class Main {
 		int M = Integer.parseInt(st.nextToken());
 		int V = Integer.parseInt(st.nextToken());
 		
-        nums = new HashMap<>();
+        connect = new HashMap<>();
 		for (int i = 1; i <= N; i++) {
-			nums.put(i, new ArrayList<Integer>());
+			connect.put(i, new ArrayList<>());
 		}
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine().trim());
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
-			nums.get(A).add(B);
-			nums.get(B).add(A);
+			connect.get(A).add(B);
+			connect.get(B).add(A);
+		}
+		br.close();
+		
+		for (int node : connect.keySet()) {
+			Collections.sort(connect.get(node));
 		}
 		
-		for (int key : nums.keySet()) {
-            Collections.sort(nums.get(key));
-        }
-		
-		check = new boolean[N + 1];
+		visited = new boolean[N + 1];
 		System.out.println(dfs(V, new StringBuilder()));
 		
-		check = new boolean[N + 1];
+		visited = new boolean[N + 1];
 		System.out.println(bfs(V));
-		
-		br.close();
-	}
-	public static String dfs(int start, StringBuilder sb) {
-		check[start] = true;
-		sb.append(start).append(" ");
-		
-		for(int next : nums.get(start)){
-			if(!check[next]) dfs(next, sb);
-		}
-		
-		return sb.toString().trim();
 	}
 	
-	public static String bfs(int start) {
+	private static String bfs (int start) {
 		StringBuilder sb = new StringBuilder();
+		
 		Queue<Integer> queue = new LinkedList<>();
-		
 		queue.offer(start);
-		check[start] = true;
-		sb.append(start).append(" ");
+		visited[start] = true;
+        sb.append(start).append(" ");
 		
-		while(!queue.isEmpty()) {
+		while (!queue.isEmpty()) {
 			int node = queue.poll();
-			for (int next : nums.get(node)) {
-				if (!check[next]) {
-					check[next] = true;
+			
+			for (int next : connect.get(node)) {
+				if (!visited[next]){
+					visited[next] = true;
 					queue.offer(next);
 					sb.append(next).append(" ");
 				}
 			}
 		}
 		
-		return sb.toString().trim();
+		return sb.toString();
+	}
+	
+	private static String dfs (int start, StringBuilder sb) {
+		visited[start] = true;
+		sb.append(start).append(" ");
+		
+		for (int next : connect.get(start)) {
+			if (!visited[next]) dfs(next, sb);
+		}
+		
+		return sb.toString();
 	}
 }
