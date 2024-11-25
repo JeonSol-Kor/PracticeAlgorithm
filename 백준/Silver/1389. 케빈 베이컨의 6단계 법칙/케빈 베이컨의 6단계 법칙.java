@@ -2,47 +2,77 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine().trim());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        
-        int[][] matrix = new int[N + 1][N + 1];
-        
-        for (int i = 0; i < matrix.length; i++) {
-            Arrays.fill(matrix[i], 101);
-        }
-        
-        for (int i = 0; i < M; i++){
-            st = new StringTokenizer(br.readLine().trim());
-            int A = Integer.parseInt(st.nextToken());
-            int B = Integer.parseInt(st.nextToken());
-            matrix[A][B] = 1;
-            matrix[B][A] = 1;
-        }
-        br.close();
+    static int N, M;
+    static List<Integer>[] graph;
+    static int[] baconNumbers;
 
-        for(int k = 1; k <= N; k++){
-            for(int i = 1; i <= N; i++){
-                for(int j = 1; j <= N; j++){
-                    matrix[i][j] = Math.min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        // 그래프 초기화
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        // 친구 관계 입력
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a);
+        }
+
+        baconNumbers = new int[N + 1];
+
+        // 각 사람에 대해 BFS 수행
+        for (int i = 1; i <= N; i++) {
+            baconNumbers[i] = bfs(i);
+        }
+
+        // 최소 케빈 베이컨 수를 가진 사람 찾기
+        int minBacon = Integer.MAX_VALUE;
+        int person = 0;
+        for (int i = 1; i <= N; i++) {
+            if (baconNumbers[i] < minBacon) {
+                minBacon = baconNumbers[i];
+                person = i;
+            }
+        }
+
+        System.out.println(person);
+    }
+
+    static int bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[N + 1];
+        int[] distance = new int[N + 1];
+
+        queue.offer(start);
+        visited[start] = true;
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+
+            for (int neighbor : graph[current]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    distance[neighbor] = distance[current] + 1;
+                    queue.offer(neighbor);
                 }
             }
         }
 
-        int answer = 0, min = 10000000;
-        for(int i = 1; i <= N; i++){
-            int sum = 0;
-            for(int j = 1; j <= N; j++){
-                sum += matrix[i][j];
-            }
-            if (min > sum) {
-                answer = i;
-                min = sum;
-            }
+        int sum = 0;
+        for (int i = 1; i <= N; i++) {
+            sum += distance[i];
         }
 
-        System.out.println(answer);
+        return sum;
     }
 }
