@@ -21,21 +21,16 @@ public class Main {
             
             while (left < right){
                 int sum = yongEak[left] + yongEak[right];
-                if(sum == 0){
-                    num1 = yongEak[left];
-                    num2 = yongEak[right];
-                    break;
-                } else if (Math.abs(sum) < min) {
+                if (Math.abs(sum) < min) {
                     min = Math.abs(sum);
                     num1 = yongEak[left];
                     num2 = yongEak[right];
-                } else {
-                    if(sum > 0) {
-                        right--;
-                    }else{
-                        left++;
-                    }
                 }
+                if(sum > 0) {
+                    right--;
+                }else if(sum < 0){
+                    left++;
+                }else break;
             }
             System.out.println(num1 + " " + num2);
         }
