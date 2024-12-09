@@ -1,10 +1,12 @@
+import java.util.*;
+
 class Solution {
     public int solution(String before, String after) {
-        int bSum = 0, aSum = 0;
-        for(int i = 0; i < before.length(); i++){
-            bSum += before.charAt(i);
-            aSum += after.charAt(i);
-        }
-        return bSum == aSum ? 1 : 0;
+        char[] a = before.toCharArray();
+        char[] b = after.toCharArray();
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        return new String(a).equals(new String(b)) ? 1 :0;
     }
 }
