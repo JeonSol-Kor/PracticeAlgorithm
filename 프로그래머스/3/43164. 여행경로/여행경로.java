@@ -1,5 +1,4 @@
 import java.util.*;
-
 class Solution {
     public String[] solution(String[][] tickets) {
         Map<String, PriorityQueue<String>> graph = new HashMap<>();
@@ -11,11 +10,11 @@ class Solution {
         dfs("ICN", graph, result);
         return result.toArray(new String[0]);
     }
-    private void dfs(String start, Map<String, PriorityQueue<String>> graph, LinkedList<String> result) {
-        while(graph.containsKey(start) && !graph.get(start).isEmpty()){
-            String next = graph.get(start).poll();
+    private void dfs(String current, Map<String, PriorityQueue<String>> graph, LinkedList<String> result){
+        while(graph.containsKey(current) && !graph.get(current).isEmpty()){
+            String next = graph.get(current).poll();
             dfs(next, graph, result);
         }
-        result.addFirst(start);
+        result.addFirst(current);
     }
 }
